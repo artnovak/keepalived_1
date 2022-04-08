@@ -1,0 +1,18 @@
+[lb]
+172.16.1.50 ansible_user=root
+172.16.1.51 ansible_user=root 
+[ws]
+172.16.1.52 ansible_user=root
+172.16.1.53 ansible_user=root
+
+[ws1]
+172.16.1.52 ansible_user=root
+[ws2]
+172.16.1.53 ansible_user=root
+
+[lb1]
+172.16.1.50 ansible_user=root
+[lb2]
+172.16.1.51 ansible_user=root
+
+

@@ -1,0 +1,52 @@
+---
+- name: "Setup NGINX Server" 
+  hosts: ws
+  vars: 
+    ip_ws1: 172.16.1.52  
+    ip_ws2: 172.16.1.53  
+  tasks:
+  - name: "Update packages"
+    yum:
+      name: '*'
+      state: latest
+  
+  - name: "install EPEL repo"
+    become: yes
+    yum: name=epel-release state=present
+  
+  - name: "Install yum-utills"
+    become: yes
+    yum:
+      name: yum-utils
+      state: latest      
+
+  - name: "Install Nginx"
+    become: yes
+    yum:
+      name: nginx
+      state: latest
+
+- name: "change ws1 index.html"
+  hosts: ws1
+  tasks:
+  - name: "copy index.html to web server 1"  
+    template: >
+      src=templates/nginx/ws1/index.html.j2
+      dest=/usr/share/nginx/html/index.html
+
+- name: "change ws2 index.html"
+  hosts: ws2
+  tasks:  
+  - name: "copy index.html to web server 1"  
+    template: >
+      src=templates/nginx/ws2/index.html.j2
+      dest=/usr/share/nginx/html/index.html
+
+- name: "restart nginx on all servers"
+  hosts: ws
+  tasks: 
+  - name: "Restart nginx deamon"
+    service:
+      name: nginx
+      enabled: yes
+      state: restarted       

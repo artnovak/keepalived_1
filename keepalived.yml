@@ -1,0 +1,41 @@
+---
+- name: "Install keepalived and update packeges"
+  hosts: lb
+  tasks:
+
+  - name:
+    yum:
+      name: '*'
+      state: latest
+
+  - name:
+    yum:
+      name: keepalived
+      state: latest
+
+- name: "Configure config file on lb1"
+  hosts: lb1
+  tasks:
+
+  - name: "Use j2 template"
+    template: >
+      src=templates/keepalived_Master/keepalived.conf.j2
+      dest=/etc/keepalived/keepalived.conf
+
+- name: "Configure config file on lb2"
+  hosts: lb2
+  tasks:
+
+  - name: "Use j2 template"
+    template: >
+      src=templates/keepalived_Backup/keepalived.conf.j2
+      dest=/etc/keepalived/keepalived.conf
+
+- name: "Restart keepalived and enabled on all servers"
+  hosts: lb
+  tasks:
+  - name: "Restart and enabled keepalived deamon"
+    service:
+      name: keepalived
+      enabled: yes
+      state: restarted
